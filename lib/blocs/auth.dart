@@ -14,6 +14,7 @@ class AuthBloc extends ChangeNotifier {
 
   AuthBloc({@required userRepository}) : assert(userRepository != null) {
     _userRepository = userRepository;
+    this.startAuth();
   }
 
   AuthState _authState = AuthState.Uninitialized;

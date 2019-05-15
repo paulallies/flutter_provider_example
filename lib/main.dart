@@ -11,34 +11,19 @@ void main() {
   runApp(App(userRepository: UserRepository()));
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   UserRepository _userRepository;
   App({@required userRepository}) {
     _userRepository = userRepository;
   }
-  @override
-  _AppState createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  AuthBloc _authBloc;
-  @override
-  void initState() {
-    _authBloc = AuthBloc(userRepository: widget._userRepository);
-    _authBloc.startAuth();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _authBloc.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AuthBloc>(
-      builder: (context) => _authBloc,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthBloc>(
+            builder: (context) => AuthBloc(userRepository: _userRepository)),
+      ],
       child: MaterialApp(
         home: Consumer<AuthBloc>(builder: (context, authBloc, _) {
           if (authBloc.authState == AuthState.Uninitialized) {
